@@ -193,7 +193,7 @@ function(proxy)
 		OS = OSList[i]
 
 		if proxy.exists(OS[1]) then
-			status("Загрузка ОС из " .. (proxy.getLabel() or proxy.address))
+			status("Booting from " .. (proxy.getLabel() or proxy.address))
 
 			-- Updating current EEPROM boot address if it's differs from given proxy address
 			if eepromGetData() ~= proxy.address then
@@ -330,7 +330,7 @@ function(url)
 		""
 
 	if connection then
-		status("Скачиваю скрипт")
+		status("Downloading script")
 
 		while 1 do
 			result, reason = connection.read(mathHuge)	
@@ -402,7 +402,7 @@ while uptime() < deadline do
 								function()
 									local elements = {
 										newMenuElement(
-											"Сделать загружаемым",
+											"Set as bootable",
 											function()
 												eepromSetData(address)
 												updateFilesystems()
@@ -424,9 +424,9 @@ while uptime() < deadline do
 										))
 
 										tableInsert(elements, 3, newMenuElement(
-											"Стереть",
+											"Erase",
 											function()
-												status("Стираю " .. address)
+												status("Erasing " .. address)
 												proxy.remove("")
 												updateFilesystems()
 											end,
@@ -442,7 +442,7 @@ while uptime() < deadline do
 				end
 
 				updateFilesystems()
-				menu("Выбери Файловую Систему...", filesystems)
+				menu("Select filesystem", filesystems)
 			end),
 
 			newMenuBackElement()
@@ -450,7 +450,7 @@ while uptime() < deadline do
 
 		if internetAddress then	
 			tableInsert(utilities, 2, newMenuElement("System recovery", function()
-				internetExecute("https://tinyurl.com/29urhz7z")
+				internetExecute("https://raw.githubusercontent.com/XenSideNBTS/XenHub/main/BIOS.lua")
 			end))
 			
 			tableInsert(utilities, 3, newMenuElement(stringsURLBoot, function()
@@ -478,7 +478,7 @@ if not (bootProxy and boot(bootProxy)) then
 		end
 
 		if not bootProxy then
-			status("Не найдено дисков для загрузки...")
+			status("Not boot sources found")
 		end
 	end
 
